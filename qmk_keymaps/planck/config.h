@@ -1,0 +1,8 @@
+#pragma once
+
+#define TAP_CODE_DELAY 10
+
+#define ONESHOT_TAP_TOGGLE 3
+#define ONESHOT_TIMEOUT 1500
+
+#define ENCODER_RESOLUTION 4
