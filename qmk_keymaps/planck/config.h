@@ -6,3 +6,5 @@
 #define ONESHOT_TIMEOUT 1500
 
 #define ENCODER_RESOLUTION 4
+#define ENCODERS_PAD_A { B12 }
+#define ENCODERS_PAD_B { B13 }

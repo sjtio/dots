@@ -24,7 +24,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_LOWER]  = LAYOUT_planck_mit(KC_TRNS,         KC_GRV,      KC_NO,    KC_NO,    KC_NO,        KC_NO,    KC_NO,    KC_NO,         KC_NO,    KC_MINS,  KC_EQL,   KC_BSPC,
 	                              KC_TRNS,         KC_1,        KC_2,     KC_3,     KC_4,         KC_5,     KC_6,     KC_7,          KC_8,     KC_9,     KC_0,     KC_NUHS,
 	                              KC_TRNS,         KC_NUBS,     KC_NO,    KC_NO,    KC_NO,        KC_NO,    KC_NO,    KC_NO,         KC_NO,    KC_LBRC,  KC_RBRC,  KC_TRNS,
-	                              KC_TRNS,         KC_TRNS,     KC_TRNS,  KC_TRNS,  KC_TRNS,      KC_TRNS,            MO(_EXTRA),    KC_MPRV,  KC_MUTE,  KC_MPLY,  KC_MNXT),
+	                              KC_MUTE,         KC_TRNS,     KC_TRNS,  KC_TRNS,  KC_TRNS,      KC_TRNS,            MO(_EXTRA),    KC_MPRV,  KC_MUTE,  KC_MPLY,  KC_MNXT),
 
 	[_HIGHER] = LAYOUT_planck_mit(KC_TRNS,         S(KC_GRV),   KC_NO,    KC_NO,    KC_NO,        KC_NO,    KC_NO,    KC_NO,         KC_NO,    KC_UNDS,  KC_PLUS,  KC_BSPC,
 	                              KC_TRNS,         S(KC_1),     S(KC_2),  S(KC_3),  S(KC_4),      S(KC_5),  S(KC_6),  S(KC_7),       S(KC_8),  S(KC_9),  S(KC_0),  S(KC_NUHS),
@@ -38,5 +38,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void encoder_update_user(uint8_t index, bool clockwise) {
-    clockwise ? tap_code(KC_VOLU) : tap_code(KC_VOLD);
+    switch (biton32(layer_state)) {
+        case (_QWERTY):
+            clockwise ? tap_code(KC_LEFT) : tap_code(KC_RIGHT);
+            break;
+        case (_LOWER):
+            clockwise ? tap_code(KC_VOLD) : tap_code(KC_VOLU);
+            break;
+        case (_HIGHER):
+            clockwise ? tap_code(KC_BRID) : tap_code(KC_BRIU);
+            break;
+        case (_EXTRA):
+            clockwise ? tap_code(KC_PGDN) : tap_code(KC_PGUP);
+            break;
+    }
 }
