@@ -1,0 +1,182 @@
+set nocompatible
+filetype plugin indent on
+
+call plug#begin()
+Plug 'romainl/vim-cool'
+Plug 'itchyny/lightline.vim'
+Plug 'morhetz/gruvbox'
+Plug 'airblade/vim-gitgutter'
+Plug 'junegunn/fzf.vim'
+
+Plug 'unblevable/quick-scope'
+Plug 'godlygeek/tabular'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-surround'
+Plug 'w0rp/ale'
+Plug 'ludovicchabant/vim-gutentags'
+
+Plug 'vimwiki/vimwiki'
+
+Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
+
+Plug 'SirVer/ultisnips', { 'for': ['tex', 'python'] }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'lervag/vimtex', { 'for': 'tex' }
+Plug 'kovetskiy/sxhkd-vim', { 'for': 'sxhkd' }
+call plug#end()
+
+" Plugin settings
+
+let g:vimwiki_list = [{'path': $LBRY.'/documents/notes',
+                      \'syntax': 'markdown',
+                      \'ext': '.md',
+                      \'diary_rel_path': './journal/'}]
+
+let g:vimwiki_global_ext = 0
+let g:vimwiki_markdown_link_ext = 1
+
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpForwardTrigger = '<tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
+
+let g:gruvbox_italic=1
+
+let g:lightline = {'colorscheme': 'gruvbox'}
+
+let g:tex_flavor = "latex"
+let g:vimtex_view_method = 'zathura'
+
+let g:ale_echo_msg_format = '[%linter%] %s'
+let g:ale_lint_on_text_changed = 'never'
+
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+let g:gitgutter_override_sign_column_highlight = 0
+let g:gitgutter_sign_added = '|'
+let g:gitgutter_sign_modified = '|'
+let g:gitgutter_sign_removed = '-'
+let g:gitgutter_sign_removed_first_line = '◥'
+let g:gitgutter_sign_modified_removed = '◢'
+
+let g:loaded_python_provider = 1
+let g:python_host_skip_check=1
+let g:python_host_prog = '/usr/bin/python2'
+let g:python3_host_skip_check=1
+let g:python3_host_prog = '/usr/bin/python3'
+
+let g:netrw_browser_viewer = "firefox"
+
+let mapleader = ","
+let maplocalleader = "\\"
+
+if !has('nvim')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+    let &t_ZH ="\e[3m"
+    let &t_ZR ="\e[23m"
+endif
+
+if has('nvim')
+    set inccommand=nosplit
+endif
+
+colorscheme gruvbox
+syntax enable
+" set t_Co=256
+
+set termguicolors
+set background=dark
+set autoindent
+set copyindent
+
+set shiftwidth=4
+set expandtab
+set tabstop=4
+
+set shortmess=I
+set gdefault
+set virtualedit=block
+
+set cursorline
+set number
+set relativenumber
+set wildmenu
+set showmatch
+set signcolumn=yes
+set noshowmode
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set pastetoggle=<leader>k
+
+set laststatus=2
+set noshowcmd noruler
+
+set hidden
+
+set conceallevel=1
+set linebreak
+setlocal spell
+set spelllang=en_gb
+
+set mouse=a
+
+set formatoptions+=j
+
+command! Todo Rg TODO|FIXME
+
+autocmd BufWritePre * %s/\s\+$//e
+
+autocmd FileType tex set norelativenumber
+
+if has('nvim')
+    autocmd  FileType fzf set laststatus=0 norelativenumber nonumber | autocmd BufLeave <buffer> set laststatus=2
+endif
+
+inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+
+nnoremap Y y$
+
+nnoremap ; :
+nnoremap : ;
+
+nnoremap <C-N> :bnext<CR>
+nnoremap <C-P> :bprev<CR>
+nnoremap <C-B> :Buffers<CR>
+
+inoremap jk <esc>
+inoremap jK <esc>
+inoremap Jk <esc>
+inoremap JK <esc>
+inoremap kj <esc>
+inoremap kJ <esc>
+inoremap Kj <esc>
+inoremap KJ <esc>
+
+inoremap <up>    <nop>
+inoremap <down>  <nop>
+inoremap <left>  <nop>
+inoremap <right> <nop>
+nnoremap <up>    <nop>
+nnoremap <down>  <nop>
+nnoremap <left>  <nop>
+nnoremap <right> <nop>
+
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
+nnoremap <leader>[ viw<esc>a]<esc>bi[<esc>lel
+nnoremap <leader>{ viw<esc>a}<esc>bi{<esc>lel
+nnoremap <leader>$ viw<esc>a$<esc>bi$<esc>lel
+
+vnoremap <leader>" <esc>a"<esc>`<i"<esc>lel
+vnoremap <leader>' <esc>a'<esc>`<i'<esc>lel
+vnoremap <leader>( <esc>a)<esc>`<i(<esc>lel
+vnoremap <leader>[ <esc>a]<esc>`<i[<esc>lel
+vnoremap <leader>{ <esc>a}<esc>`<i{<esc>lel
+vnoremap <leader>$ <esc>a$<esc>`<i$<esc>lel
