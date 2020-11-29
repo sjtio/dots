@@ -1,0 +1,24 @@
+export PATH=$HOME/bin:$PATH
+
+export LC_ALL=en_GB.UTF-8
+
+export EDITOR=nvim
+export VISUAL=nvim
+export PAGER=less
+export LESS='-R'
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export WM=bspwm
+export SXHKD_SHELL=dash
+export KDEWM=/usr/bin/bspwm
+export HOST=$(cat /etc/hostname)
+
+export LBRY=$HOME/library
+export DOTS=$HOME/dots
+
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+if [ "$WM" = "bspwm" ]; then
+  export _JAVA_AWT_WM_NONREPARENTING=1
+fi
