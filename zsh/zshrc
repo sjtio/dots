@@ -1,0 +1,193 @@
+# run task command in background, filtering tasks depending on time
+task_project () {
+    filter='+@work or +@jobs'
+    currenttime="$(date +%H:%M)"
+    if [[ "$currenttime" > "18:00" ]] || [[ "$currenttime" < "09:00" ]] || [[ "$(date +%u)" > 5 ]]; then
+        filter='+@home'
+    fi
+    task "$filter" next
+}
+
+( task_project & )
+unfunction task_project
+
+autoload -Uz promptinit && promptinit
+autoload -U compaudit compinit
+autoload -U colors && colors
+compinit -i -d "${ZSH_COMPDUMP}"
+
+# HISTORY
+
+HISTFILE=$HOME/.zsh_history
+
+HISTSIZE=200000
+SAVEHIST=200000
+
+setopt append_history
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups # ignore duplication command history list
+setopt hist_ignore_space
+setopt hist_verify
+setopt inc_append_history
+setopt share_history # share command history data
+
+bindkey -e
+
+# COMPLETION
+
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
+eval "$(dircolors -b)"
+
+unsetopt menu_complete
+unsetopt flowcontrol
+setopt auto_menu
+setopt auto_cd
+setopt complete_in_word
+setopt always_to_end # move cursor after in-word completion
+
+zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+
+zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+zstyle ':completion::complete:*' use-cache 1
+zstyle ':completion::complete:*' cache-path $ZSH_CACHE_DIR
+
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+bindkey '^[[A' up-line-or-search
+bindkey '^[[B' down-line-or-search
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;5D' backward-word
+
+autoload -U down-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
+
+autoload -U up-line-or-beginning-search
+zle -N up-line-or-beginning-search
+bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
+
+
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh
+
+
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt pushdminus
+
+
+alias /="cd /"
+alias ~="cd ~"
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
+
+alias 1="cd -"
+alias 2="cd -2"
+alias 3="cd -3"
+alias 4="cd -4"
+alias 5="cd -5"
+alias 6="cd -6"
+alias 7="cd -7"
+alias 8="cd -8"
+alias 9="cd -9"
+
+alias d="dirs -v"
+alias pu="pushd"
+alias po="popd"
+
+command -v bat >/dev/null 2>&1 && alias cat="bat"
+command -v nvim >/dev/null 2>&1 && alias vim="nvim"
+alias diff="diff --color=auto"
+alias grep="grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}"
+alias mkdir="mkdir -p"
+alias rmdir="rmdir -p"
+alias rm="rm -vi"
+alias mv="mv -vi"
+alias cp="cp -vi"
+
+alias dc="cd"
+alias md="mkdir"
+alias rd="rmdir"
+
+alias l="ls -AlFh --color=always --time-style=+"
+alias ll="ls -lFh --color=always --time-style=+"
+
+alias o="rifle"
+alias e="exit"
+alias g="git"
+alias z="zathura"
+alias t="task"
+alias v="vim"
+
+# best used: cdp !$
+cdp () { \cd "$(dirname "$@")" }
+
+f () {
+    file="$(fd --hidden -t f | \
+            fzf --reverse --height=90% --info=inline --query=$@ --prompt=└»)"
+    [ -n "$file" ] && rifle "$file"
+    echo "$file"
+}
+
+map () { telnet mapscii.me }
+
+wttr () { curl -s wttr.in/"$@" | head -2 }
+
+setopt promptsubst
+
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*:*' check-for-changes true
+zstyle ':vcs_info:*:*' unstagedstr '◯ '
+zstyle ':vcs_info:*:*' stagedstr ' ⬤ '
+zstyle ':vcs_info:*:*' actionformats "%S" " %F{003}[%F{011}%r|%b%F{003}%u%c]"
+zstyle ':vcs_info:*:*' formats "%S" " %F{003}[%F{011}%r|%b%F{003}%u%c]"
+
+autoload -U add-zsh-hook
+add-zsh-hook precmd vcs_info
+
+# INFO: http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
+function () {
+    local -a line
+
+    venv_info () {
+        [[ -n $VIRTUAL_ENV ]] && echo " %F{004}[%F{012}${VIRTUAL_ENV##*/}%F{004}]"
+    }
+
+    # '%~'' sometimes changes all environment variables, not just $HOME so use ${PWD/#$HOME/~} instead?
+    line=('┌%F{013}[%n@%m] %F{006}[%F{014}%~%F{006}]$(venv_info)${vcs_info_msg_1_}%F{default}'
+          '└%(0?.%F{014}.%F{167})%(!.#.»)%F{default} ')
+
+    PROMPT=${(F)line}
+}
+
+
+# syntax highlighting
+syntax_path=/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+if [ ! -f $syntax_path ]; then
+    syntax_path=$HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    [ ! -f $syntax_path ] && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/zsh-syntax-highlighting"
+fi
+
+source $syntax_path
+unset syntax_path
+
+ZSH_HIGHLIGHT_STYLES[precommand]=fg=10,underline
+ZSH_HIGHLIGHT_STYLES[command]=fg=010
+ZSH_HIGHLIGHT_STYLES[alias]=fg=010
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=208
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=166
+
+
+cd $HOME/library
