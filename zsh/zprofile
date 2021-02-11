@@ -1,9 +1,11 @@
-# autostart session on tty1 only
 if [[ "$(tty)" == '/dev/tty1' ]]; then
     exec startx
-fi
 
-if [[ "$(tty)" == '/dev/tty2' ]]; then
+elif [[ "$(tty)" == '/dev/tty2' ]]; then
+    export MOZ_ENABLE_WAYLAND=1
+    XKB_DEFAULT_LAYOUT=gb exec river
+
+elif [[ "$(tty)" == '/dev/tty3' ]]; then
     echo -en "\e]P0282828"
     echo -en "\e]P1cc241d"
     echo -en "\e]P298971a"
@@ -21,5 +23,6 @@ if [[ "$(tty)" == '/dev/tty2' ]]; then
     echo -en "\e]PE8ec07c"
     echo -en "\e]PFebdbb2"
 
-    dvtm-status
+    exec dvtm-status
+
 fi
