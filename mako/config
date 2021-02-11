@@ -1,0 +1,23 @@
+anchor=bottom-right
+layer=overlay
+font=Iosevka 11
+background-color=#282828FF
+text-color=#ebdbb2ff
+width=400
+height=100
+margin=5
+padding=5
+border-size=1
+border-color=#ebdbb2ff
+border-radius=5
+progress-color=over #ebdbb2ff
+default-timeout=5000
+
+[app-name=volume_change]
+width=40
+default-timeout=1500
+
+[app-name=brightness_change]
+width=40
+default-timeout=1500
+
