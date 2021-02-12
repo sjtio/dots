@@ -1,0 +1,94 @@
+#!/bin/sh
+
+# STARTUP
+
+swaybg -m fill -i ~/wallpaper &
+mako &
+swayidle -w \
+    timeout 600  "swaylock -f -c '#282828'" \
+    before-sleep "swaylock -f -c '#282828'" &
+
+
+mod="Mod4"
+
+# BASIC MAPPINGS
+
+riverctl map normal $mod Return spawn alacritty
+riverctl map normal $mod Space  spawn runner
+
+riverctl map normal $mod S toggle-float
+riverctl map normal $mod F toggle-fullscreen
+
+riverctl map normal $mod D close
+
+riverctl map normal $mod G zoom
+
+riverctl map normal $mod H mod-main-factor -0.05
+riverctl map normal $mod L mod-main-factor +0.05
+
+riverctl map normal $mod+Shift H mod-main-count +1
+riverctl map normal $mod+Shift L mod-main-count -1
+
+riverctl map normal $mod J focus-view next
+riverctl map normal $mod K focus-view previous
+
+riverctl map normal $mod+Shift J swap next
+riverctl map normal $mod+Shift K swap previous
+
+riverctl map normal $mod X spawn "swaylock -c '#282828'"
+
+riverctl map normal $mod Period focus-output next
+riverctl map normal $mod Comma focus-output previous
+
+riverctl map normal $mod+Shift Period send-to-output next
+riverctl map normal $mod+Shift Comma send-to-output previous
+
+riverctl map normal $mod M layout full
+riverctl map normal $mod+Shift M layout rivertile left
+
+# TAG MAPPINGS
+
+for i in $(seq 1 9); do
+
+    tags=$((1 << (i - 1)))
+
+    riverctl map normal $mod $i set-focused-tags $tags
+    riverctl map normal $mod+Shift $i set-view-tags $tags
+    riverctl map normal $mod+Control $i toggle-focused-tags $tags
+    riverctl map normal $mod+Shift+Control $i toggle-view-tags $tags
+done
+
+tags=$(((1 << 32) - 1))
+riverctl map normal $mod 0 set-focused-tags $tags
+riverctl map normal $mod+Shift 0 set-view-tags $tags
+riverctl map normal $mod+Control 0 toggle-focused-tags $tags
+riverctl map normal $mod+Shift+Control 0 toggle-view-tags $tags
+
+
+# SHORTCUT KEY MAPPINGS
+
+for mode in normal locked ; do
+    riverctl map $mode None XF86AudioMute        spawn volume_change --toggle-mute
+    riverctl map $mode None XF86AudioLowerVolume spawn volume_change -d 5
+    riverctl map $mode None XF86AudioRaiseVolume spawn volume_change -i 5
+
+    riverctl map $mode None XF86AudioPlay spawn playerctl play-pause
+    riverctl map $mode None XF86AudioPrev spawn playerctl previous
+    riverctl map $mode None XF86AudioNext spawn playerctl next
+
+    riverctl map $mode None XF86MonBrightnessUp   spawn brightness_change -A 5
+    riverctl map $mode None XF86MonBrightnessDown spawn brightness_change -U 5
+
+    riverctl map $mode None Print spawn 'grim -g "$(slurp)"'
+done
+
+
+# CONFIG
+
+riverctl set-repeat 50 400
+
+riverctl border-width 0
+riverctl opacity 1 0.85 0.7 0.1 0.1
+riverctl attach-mode top
+
+riverctl layout rivertile left
