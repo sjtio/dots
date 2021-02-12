@@ -66,9 +66,43 @@ riverctl map normal $mod+Control 0 toggle-focused-tags $tags
 riverctl map normal $mod+Shift+Control 0 toggle-view-tags $tags
 
 
+
+# FLOATING MAPPINGS
+
+riverctl declare-mode floating
+riverctl map normal $mod Z enter-mode floating
+riverctl map floating $mod Z enter-mode normal
+
+riverctl map floating $mod J focus-view next
+riverctl map floating $mod K focus-view previous
+
+riverctl map floating $mod D close
+
+riverctl map floating $mod+Mod1 H move left  100
+riverctl map floating $mod+Mod1 J move down  100
+riverctl map floating $mod+Mod1 K move up    100
+riverctl map floating $mod+Mod1 L move right 100
+
+riverctl map floating $mod+Control H snap left
+riverctl map floating $mod+Control J snap down
+riverctl map floating $mod+Control K snap up
+riverctl map floating $mod+Control L snap right
+
+riverctl map floating $mod+Shift H resize horizontal -100
+riverctl map floating $mod+Shift J resize vertical    100
+riverctl map floating $mod+Shift K resize vertical   -100
+riverctl map floating $mod+Shift L resize horizontal  100
+
+riverctl map floating $mod S toggle-float
+riverctl map floating $mod F toggle-fullscreen
+
+riverctl map-pointer floating $mod BTN_LEFT move-view
+riverctl map-pointer floating $mod BTN_RIGHT resize-view
+
+
 # SHORTCUT KEY MAPPINGS
 
-for mode in normal locked ; do
+for mode in normal locked floating; do
     riverctl map $mode None XF86AudioMute        spawn volume_change --toggle-mute
     riverctl map $mode None XF86AudioLowerVolume spawn volume_change -d 5
     riverctl map $mode None XF86AudioRaiseVolume spawn volume_change -i 5
