@@ -1,0 +1,7 @@
+monitor = ${env:MONITOR}
+extra_monitor = HDMI1
+
+main_modules =   battery network date
+extra_modules = date
+
+network_interface = wlp2s0

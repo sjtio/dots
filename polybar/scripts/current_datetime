@@ -1,0 +1,9 @@
+#! /bin/sh
+
+case $(date +%d) in
+    01|21|31) ord="st";;
+    02|22)    ord="nd";;
+    03|23)    ord="rd";;
+    *)        ord="th";;
+esac
+date +"%H:%M on %^A %-d$ord %^B"
