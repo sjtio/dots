@@ -35,7 +35,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	                              KC_TRNS,         S(KC_NUBS),  KC_NO,    KC_NO,    KC_NO,        KC_NO,    KC_NO,    KC_NO,         KC_NO,    KC_LCBR,  KC_RCBR,  KC_TRNS,
 	                              KC_TRNS,         KC_TRNS,     KC_TRNS,  KC_TRNS,  MO(_EXTRA),   KC_TRNS,            KC_TRNS,       KC_MPRV,  KC_MUTE,  KC_MPLY,  KC_MNXT),
 
-	[_EXTRA]  = LAYOUT_planck_mit(KC_NO,           KC_F1,       KC_F2,    KC_F3,    KC_F4,        KC_NO,    KC_NO,    KC_NO,         KC_NO,    KC_NO,    KC_NO,    KC_DEL,
+	[_EXTRA]  = LAYOUT_planck_mit(KC_NO,           KC_F1,       KC_F2,    KC_F3,    KC_F4,        KC_NO,    KC_NO,    KC_NO,         KC_NO,    KC_NO,    KC_PSCR,  KC_DEL,
 	                              KC_NO,           KC_F5,       KC_F6,    KC_F7,    KC_F8,        KC_NO,    KC_LEFT,  KC_DOWN,       KC_UP,    KC_RGHT,  KC_NO,    KC_NO,
 	                              KC_NO,           KC_F9,       KC_F10,   KC_F11,   KC_F12,       KC_NO,    KC_NO,    KC_NO,         KC_NO,    KC_NO,    KC_NO,    KC_NO,
 	                              KC_NO,           KC_NO,       KC_NO,    KC_NO,    KC_TRNS,      KC_NO,              KC_TRNS,       KC_NO,    KC_NO,    KC_NO,    KC_NO)
