@@ -44,8 +44,14 @@ riverctl map normal $mod Comma focus-output previous
 riverctl map normal $mod+Shift Period send-to-output next
 riverctl map normal $mod+Shift Comma send-to-output previous
 
-riverctl map normal $mod M layout full
-riverctl map normal $mod+Shift M layout rivertile left
+layouts="/tmp/river_layouts"
+cat > $layouts << EOF
+full
+rtab
+rivertile left
+EOF
+riverctl map normal $mod M spawn 'riverctl layout "$(head -1 '"$layouts"'; sed -i "1{H;1h;d};\$G" '"$layouts"')"'
+
 
 # TAG MAPPINGS
 
