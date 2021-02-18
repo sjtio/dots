@@ -1,0 +1,26 @@
+#! /bin/dash
+
+# uses chbpresel to use borders as preselection indication on leaf nodes
+# chbpresel is from https://github.com/neeasade/opt
+
+dir="$*"
+node=$(bspc query --nodes --node focused.leaf)
+if [ "$dir" = "cancel" ]; then
+    chbpresel -C "${focused_color#?}" -c "${focused_color#?}" -d "$dir_num" "$node"
+    bspc config no_presel_feedback false
+elif [ "$node" ]; then
+    bspc config presel_feedback false
+    case $dir in
+        north) dir_num=1 ;;
+        east)  dir_num=4 ;;
+        south) dir_num=3 ;;
+        west)  dir_num=2 ;;
+    esac
+    presel_color=$(bspc config presel_feedback_color)
+    focused_color=$(bspc config focused_border_color)
+    chbpresel -C "${presel_color#?}" -c "${focused_color#?}" -d "$dir_num" "$node"
+else
+    bspc config presel_feedback true
+fi
+bspc node --presel-dir "$dir"
+

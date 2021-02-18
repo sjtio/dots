@@ -1,0 +1,20 @@
+#! /bin/sh
+
+input="$(: | dmenu)" || exit
+
+[ -z "$input" ] &&  bspc desktop --remove && exit
+
+full=$(bspc query --desktops --names --desktop)
+first_prefix="$(printf %.2s "$full")"
+first="$(printf %.1s "$full")"
+desktops_prefix="q·w·e·r·t·y·u·i·o·p·"
+
+# if ((first char is in desktops and prefixes, and full length is 1) or
+#     (first two chars in desktop prefix and it is length 2)) and
+#    ( input is not exactly first char)
+if { [ "${desktops_prefix#*$first*}" != "$desktops_prefix" ] && [ ${#full} = 1 ]; } ||
+   { [ "${desktops_prefix#*$first_prefix*}" != "$desktops_prefix" ] && [ ${#first_prefix} = 2 ]; }; then
+    [ "$input" != "$first" ] && prefix="$first·"
+fi
+
+bspc desktop --rename "$prefix$input"

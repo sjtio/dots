@@ -1,0 +1,25 @@
+#! /bin/sh
+
+# requires bspwm, slop
+
+state_file="/tmp/bspwm_state.json"
+
+bspc wm --dump-state > "$state_file"
+bspc monitor --reset-desktops "Pick a Node"
+bspc desktop --layout tiled
+
+# focus root node and balance
+bspc node @/ --focus --balance
+
+window_id=$(slop --highlight --tolerance 9999999 --color 0.17578125,0.328125,0.34375,0.4 --format %i)
+bspc wm --load-state "$state_file"
+
+# this script doesn't really work because {dump,load}-state
+# don't do what I expect, so we need to trigger recalculation
+# of window dimensions:
+bspc config window_gap $(bspc config window_gap)
+bspc query --desktops --desktop .occupied | while read -r desktop; do
+    bspc desktop --focus $desktop
+done
+
+bspc node --focus "$window_id"

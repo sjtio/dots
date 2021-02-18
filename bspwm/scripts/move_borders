@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# usage: ./script_name direction step
+# e.g.: ./move_borders east 20
+
+case $1 in
+    north) try=top;   fail=bottom; x=0;   y=-$2 ;;
+    east)  try=right; fail=left;   x=+$2; y=0   ;;
+    south) try=top;   fail=bottom; x=0;   y=+$2 ;;
+    west)  try=right; fail=left;   x=-$2; y=0   ;;
+esac
+
+bspc node --resize "$try" "$x" "$y" || bspc node --resize "$fail" "$x" "$y"

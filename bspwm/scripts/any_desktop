@@ -1,0 +1,20 @@
+#! /bin/sh
+
+# requires bspwm and bemenu
+
+desktop_name=$(bspc query --desktops --names | bemenu -p DESKTOP:) || exit
+
+bspc query --desktops --desktop "$desktop_name" || bspc monitor --add-desktops "$desktop_name"
+
+case "$@" in
+    move)
+        bspc node --to-desktop "$desktop_name"
+        ;;
+    focus)
+        bspc desktop --focus "$desktop_name"
+        ;;
+    follow)
+        bspc node --to-desktop "$desktop_name"
+        bspc desktop --focus "$desktop_name"
+        ;;
+esac

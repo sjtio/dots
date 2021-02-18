@@ -1,0 +1,157 @@
+# quit
+super + x ; q
+	bspc quit
+
+# open a window on a new desktop
+super + shift + space
+	bspc desktop --focus next.!occupied && rofi -show
+
+
+# focus/send window to the given desktop (and search for renamed version if fail)
+super + q
+	bspc desktop -f q || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^q·')"
+super + w
+	bspc desktop -f w || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^w·')"
+super + e
+	bspc desktop -f e || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^e·')"
+super + r
+	bspc desktop -f r || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^r·')"
+super + t
+	bspc desktop -f t || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^t·')"
+super + y
+	bspc desktop -f y || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^y·')"
+super + u
+	bspc desktop -f u || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^u·')"
+super + i
+	bspc desktop -f i || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^i·')"
+super + o
+	bspc desktop -f o || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^o·')"
+super + p
+	bspc desktop -f p || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^p·')"
+super + shift + q
+	bspc node -d q || bspc node -d "$(bspc query -D --names | grep -m 1 '^q·')"
+super + shift + w
+	bspc node -d w || bspc node -d "$(bspc query -D --names | grep -m 1 '^w·')"
+super + shift + e
+	bspc node -d e || bspc node -d "$(bspc query -D --names | grep -m 1 '^e·')"
+super + shift + r
+	bspc node -d r || bspc node -d "$(bspc query -D --names | grep -m 1 '^r·')"
+super + shift + t
+	bspc node -d t || bspc node -d "$(bspc query -D --names | grep -m 1 '^t·')"
+super + shift + y
+	bspc node -d y || bspc node -d "$(bspc query -D --names | grep -m 1 '^y·')"
+super + shift + u
+	bspc node -d u || bspc node -d "$(bspc query -D --names | grep -m 1 '^u·')"
+super + shift + i
+	bspc node -d i || bspc node -d "$(bspc query -D --names | grep -m 1 '^i·')"
+super + shift + o
+	bspc node -d o || bspc node -d "$(bspc query -D --names | grep -m 1 '^o·')"
+super + shift + p
+	bspc node -d p || bspc node -d "$(bspc query -D --names | grep -m 1 '^p·')"
+
+# focus/send a window to any desktop (dmenu)
+super + {_,shift +} a
+	any_desktop {focus,move}
+
+# rename desktop (remove if blank)
+super + ctrl + a
+	rename_desktop
+
+# node state (tiled, pseudo_tiled, floating, fullscreen)
+super + s ; {t,p,s,f}
+	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+
+# node flags (marked, locked, sticky, private)
+super + f ; {m,l,s,p}
+	bspc node -g {marked,locked,sticky,private}
+
+# close focused window
+super + d
+	bspc node -c
+
+# alternate between the tiled and monocle layout
+super + m
+	bspc desktop -l next
+
+# send the focused node to the newest preselected area
+super + n
+	bspc node -n newest.!automatic
+
+# swap the current node and the biggest node, or the last focused if current is biggest
+super + g
+	biggest="$(bspc query --nodes --node biggest.local)"; \
+	node=last.local; \
+	[ "$biggest" = "$(bspc query --nodes --node focused)" ] || node="$biggest"; \
+	bspc node -s $node
+
+# focus south node (or just go to next node if node doesn't exist)
+super + j
+	bspc node -f south || bspc node -f next.leaf.local
+
+# focus north node (or just go to prev node if node doesn't exist)
+super + k
+	bspc node -f north || bspc node -f prev.leaf.local
+
+super + {h,l}
+	bspc node -f {west,east}
+
+# swap node
+super + shift + {h,j,k,l}
+	bspc node -s {west,south,north,east}
+
+
+# focus the node for the given path jump
+super + {v,b,comma,period}
+	bspc node -f @{parent,brother,first,second}
+
+# select the `super' parent
+super + shift + v
+	bspc node -f @/
+
+# focus the next/previous leaf node in the current desktop
+super + {_,shift + }c
+	bspc node -f {next,prev}.leaf.local
+
+# circulate desktop (holding ctrl does it just for focused subtree)
+super + {ctrl + ,_} {_,shift + }z
+	bspc node {_,@/} --circulate {forward,backward}
+
+# focus the next/previous desktop in the current monitor
+super + bracket{left,right}
+	bspc desktop -f {prev,next}.local.occupied
+
+# focus the next/previous desktop in the current monitor
+button{6,7}
+	bspc desktop -f {prev,next}.local.occupied
+
+# activate the next/previous desktop in the non-focused monitor (keeps focus on current monitor)
+super + shift + bracket{left,right}
+	bspc desktop -a {prev,next}.!local.occupied
+
+# focus the last node/desktop
+super + {_, shift +} Tab
+	bspc {node,desktop} -f last
+
+# focus previous monitor
+super + shift + g
+	bspc monitor --focus last
+
+# preselect the direction
+super + ctrl + {h,j,k,l}
+	presel {west,south,north,east}
+
+# preselect the ratio
+super + ctrl + {1-9}
+	bspc node -o 0.{1-9}
+
+# cancel the preselection for the focused desktop
+super + ctrl + space
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+# resize borders (wrapper around normal bspc resize window commands)
+super + alt + {h,j,k,l}
+	move_borders {west,south,north,east} 30
+
+# move a floating window
+super + alt + {a,s,d,f}
+	bspc node -v {-30 0, 0 30, 0 -30, 30 0}
