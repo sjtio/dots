@@ -3,7 +3,7 @@
 [bar/main]
 monitor = ${settings.monitor}
 
-modules-left = bspwm
+modules-left = ${env:WM}
 modules-center = title
 modules-right = ${settings.main_modules}
 
@@ -24,6 +24,7 @@ radius = 8
 background = ${color.background}
 foreground = ${color.foreground}
 
+wm-restack = ${env:WM}
 enable-ipc = true
 
 
@@ -153,24 +154,15 @@ type = internal/battery
 
 battery = BAT0
 
+format-charging = <animation-charging><label-charging>
 format-discharging = <ramp-capacity><label-discharging>
-label-discharging = %percentage%%
+format-full = <ramp-capacity><label-full>
 
 animation-charging-0 = 
 animation-charging-framerate = 9999
+animation-charging-background = ${color.purple}
 animation-charging-foreground = ${color.foreground}
 animation-charging-padding = 1
-format-charging = <animation-charging><label-charging>
-label-charging = %percentage%%
-
-format-charging-background = ${color.purple}
-
-label-charging-foreground = ${color.foreground}
-label-charging-background = ${color.bg2}
-label-discharging-foreground = ${color.foreground}
-label-discharging-background = ${color.bg2}
-label-discharging-padding = 1
-label-charging-padding = 1
 
 ramp-capacity-background = ${color.purple}
 ramp-capacity-foreground = ${color.foreground}
@@ -180,6 +172,19 @@ ramp-capacity-1 =
 ramp-capacity-2 =
 ramp-capacity-3 =
 ramp-capacity-4 =
+
+label-charging = %percentage%%
+label-charging-foreground = ${color.foreground}
+label-charging-background = ${color.bg2}
+label-charging-padding = 1
+label-discharging = %percentage%%
+label-discharging-foreground = ${color.foreground}
+label-discharging-background = ${color.bg2}
+label-discharging-padding = 1
+label-full = %percentage%%
+label-full-foreground = ${color.foreground}
+label-full-background = ${color.bg2}
+label-full-padding = 1
 
 
 [module/network]
