@@ -1,0 +1,12 @@
+#!/bin/sh
+
+[ -z "$WAYLAND_DISPLAY" ] && exit
+
+kanshi &
+waybar &
+swaybg -m fill -i ~/wallpaper &
+mako &
+foot --server &
+swayidle -w \
+    timeout 600  "swaylock -f -c '#282828'" \
+    before-sleep "swaylock -f -c '#282828'" &

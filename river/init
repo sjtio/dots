@@ -1,18 +1,8 @@
 #!/bin/sh
 
-# STARTUP
-
-swaybg -m fill -i ~/wallpaper &
-mako &
-foot --server &
-swayidle -w \
-    timeout 600  "swaylock -f -c '#282828'" \
-    before-sleep "swaylock -f -c '#282828'" &
-
+# BASIC MAPPINGS
 
 mod="Mod4"
-
-# BASIC MAPPINGS
 
 riverctl map normal $mod Return spawn footclient
 riverctl map normal $mod Space  spawn runner
@@ -109,7 +99,7 @@ riverctl map-pointer floating $mod BTN_RIGHT resize-view
 # SHORTCUT KEY MAPPINGS
 
 for mode in normal locked floating; do
-    riverctl map $mode None XF86AudioMute        spawn volume_change --toggle-mute
+    riverctl map $mode None XF86AudioMute        spawn volume_change -t
     riverctl map $mode None XF86AudioLowerVolume spawn volume_change -d 5
     riverctl map $mode None XF86AudioRaiseVolume spawn volume_change -i 5
 
@@ -120,7 +110,7 @@ for mode in normal locked floating; do
     riverctl map $mode None XF86MonBrightnessUp   spawn brightness_change -A 5
     riverctl map $mode None XF86MonBrightnessDown spawn brightness_change -U 5
 
-    riverctl map $mode None Print spawn 'grim -g "$(slurp)"'
+    riverctl map $mode None Print spawn 'grim -g "$(slurp)" "$LBRY/tmp/screenshots/$(date +%Y-%m-%d_%H:%M:%S).png"'
 done
 
 
@@ -133,3 +123,5 @@ riverctl opacity 1 0.85 0.7 0.1 0.1
 riverctl attach-mode top
 
 riverctl layout rivertile left
+
+wayland_init
