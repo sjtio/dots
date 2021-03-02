@@ -45,22 +45,23 @@ riverctl map normal $mod M spawn 'riverctl layout "$(head -1 '"$layouts"'; sed -
 
 # TAG MAPPINGS
 
-for i in $(seq 1 9); do
+set -- Q W E R T Y U I O P
+for i in $(seq 1 5); do
 
     tags=$((1 << (i - 1)))
+    eval "key=\${$i}"
 
-    riverctl map normal $mod $i set-focused-tags $tags
-    riverctl map normal $mod+Shift $i set-view-tags $tags
-    riverctl map normal $mod+Control $i toggle-focused-tags $tags
-    riverctl map normal $mod+Shift+Control $i toggle-view-tags $tags
+    riverctl map normal $mod $key set-focused-tags $tags
+    riverctl map normal $mod+Shift $key set-view-tags $tags
+    riverctl map normal $mod+Control $key toggle-focused-tags $tags
+    riverctl map normal $mod+Shift+Control $key toggle-view-tags $tags
 done
 
 tags=$(((1 << 32) - 1))
-riverctl map normal $mod 0 set-focused-tags $tags
-riverctl map normal $mod+Shift 0 set-view-tags $tags
-riverctl map normal $mod+Control 0 toggle-focused-tags $tags
-riverctl map normal $mod+Shift+Control 0 toggle-view-tags $tags
-
+riverctl map normal $mod A set-focused-tags $tags
+riverctl map normal $mod+Shift A set-view-tags $tags
+riverctl map normal $mod+Control A toggle-focused-tags $tags
+riverctl map normal $mod+Shift+Control A toggle-view-tags $tags
 
 
 # FLOATING MAPPINGS
