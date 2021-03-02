@@ -125,6 +125,10 @@ button{6,7}
 	bspc desktop -f {prev,next}.local.occupied
 
 # activate the next/previous desktop in the non-focused monitor (keeps focus on current monitor)
+super + button{6,7}
+	bspc desktop -a {prev,next}.!local.occupied
+
+# activate the next/previous desktop in the non-focused monitor (keeps focus on current monitor)
 super + shift + bracket{left,right}
 	bspc desktop -a {prev,next}.!local.occupied
 
