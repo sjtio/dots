@@ -8,7 +8,9 @@ riverctl map normal $mod Return spawn footclient
 riverctl map normal $mod Space  spawn runner
 
 riverctl map normal $mod S toggle-float
+riverctl map -release normal $mod S toggle-float
 riverctl map normal $mod F toggle-fullscreen
+riverctl map -release normal $mod F toggle-fullscreen
 
 riverctl map normal $mod D close
 
