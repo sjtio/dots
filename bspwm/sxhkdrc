@@ -10,47 +10,15 @@ super + shift + space
 super + ctrl + shift + space
 	bspwm_draw_cmd
 
-# focus/send window to the given desktop (and search for renamed version if fail)
-super + q
-	bspc desktop -f q || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^q·')"
-super + w
-	bspc desktop -f w || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^w·')"
-super + e
-	bspc desktop -f e || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^e·')"
-super + r
-	bspc desktop -f r || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^r·')"
-super + t
-	bspc desktop -f t || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^t·')"
-super + y
-	bspc desktop -f y || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^y·')"
-super + u
-	bspc desktop -f u || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^u·')"
-super + i
-	bspc desktop -f i || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^i·')"
-super + o
-	bspc desktop -f o || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^o·')"
-super + p
-	bspc desktop -f p || bspc desktop -f "$(bspc query -D --names | grep -m 1 '^p·')"
-super + shift + q
-	bspc node -d q || bspc node -d "$(bspc query -D --names | grep -m 1 '^q·')"
-super + shift + w
-	bspc node -d w || bspc node -d "$(bspc query -D --names | grep -m 1 '^w·')"
-super + shift + e
-	bspc node -d e || bspc node -d "$(bspc query -D --names | grep -m 1 '^e·')"
-super + shift + r
-	bspc node -d r || bspc node -d "$(bspc query -D --names | grep -m 1 '^r·')"
-super + shift + t
-	bspc node -d t || bspc node -d "$(bspc query -D --names | grep -m 1 '^t·')"
-super + shift + y
-	bspc node -d y || bspc node -d "$(bspc query -D --names | grep -m 1 '^y·')"
-super + shift + u
-	bspc node -d u || bspc node -d "$(bspc query -D --names | grep -m 1 '^u·')"
-super + shift + i
-	bspc node -d i || bspc node -d "$(bspc query -D --names | grep -m 1 '^i·')"
-super + shift + o
-	bspc node -d o || bspc node -d "$(bspc query -D --names | grep -m 1 '^o·')"
-super + shift + p
-	bspc node -d p || bspc node -d "$(bspc query -D --names | grep -m 1 '^p·')"
+# focus the given desktop (and search for renamed version if fail)
+super + {q,w,e,r,t,y,u,i,o,p}
+	x={q,w,e,r,t,y,u,i,o,p}; \
+	bspc desktop -f "$x" || bspc desktop -f "$(bspc query -D --names | grep -m 1 "^$x·")"
+
+# send window to the given desktop (and search for renamed version if fail)
+super + shift + {q,w,e,r,t,y,u,i,o,p}
+	x={q,w,e,r,t,y,u,i,o,p}; \
+	bspc node -d "$x" || bspc node -d "$(bspc query -D --names | grep -m 1 "^$x·")"
 
 # focus/send a window to any desktop (dmenu)
 super + {_,shift +} a
