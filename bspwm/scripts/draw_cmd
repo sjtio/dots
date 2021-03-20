@@ -1,0 +1,8 @@
+#! /bin/sh
+
+# draw a box and choose an application to appear there
+# requires rofi (easily changed), slop, bspwm
+
+cmd="$(rofi -show run -run-command "echo {cmd}")"
+geometry="$(slop --bordersize=4 --format="%wx%h+%x+%y")" || exit
+bspc rule -a \* -o state=floating rectangle=$geometry && $cmd &
