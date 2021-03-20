@@ -1,0 +1,28 @@
+#! /bin/sh
+
+# in Spotify offical desktop player, artUrl is broken as of 2021-01-21
+# the url given has open.spotify.com instead of i.scdn.co
+# spotifyd is not broken like this
+
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/spotifyd_notifiction"
+mkdir -p "$cache_dir"
+
+# loop may not be necessary
+while [ -z "$info" ]; do
+    info=$(playerctl -p spotifyd metadata --format "{{ title }}@{{ artist }} ({{ album }})@{{ mpris:artUrl }}")
+done
+
+IFS=@ read -r title detail url << EOF
+$info
+EOF
+
+[ "$(playerctl status)" = "Playing" ] || exit 0
+
+icon="$cache_dir/${url##*/}.png"
+[ -s "$icon" ] || curl -sf "$url" > "$icon"
+
+notify-send.sh --app-name=spotifyd-change \
+               --urgency="low" \
+               --replace-file="/tmp/spotifyd_change" \
+               --icon="$icon" \
+               "$title" "$detail"
