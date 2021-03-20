@@ -6,6 +6,9 @@ super + x ; q
 super + shift + space
 	bspc desktop --focus next.!occupied && rofi -show
 
+# open a window on a new desktop
+super + ctrl + shift + space
+	bspwm_draw_cmd
 
 # focus/send window to the given desktop (and search for renamed version if fail)
 super + q
@@ -51,11 +54,11 @@ super + shift + p
 
 # focus/send a window to any desktop (dmenu)
 super + {_,shift +} a
-	any_desktop {focus,move}
+	bspwm_any_desktop {focus,move}
 
 # rename desktop (remove if blank)
 super + ctrl + a
-	rename_desktop
+	bspwm_rename_desktop
 
 # node state (tiled, pseudo_tiled, floating, fullscreen)
 super + s ; {t,p,s,f}
@@ -142,7 +145,7 @@ super + shift + g
 
 # preselect the direction
 super + ctrl + {h,j,k,l}
-	presel {west,south,north,east}
+	bspwm_presel {west,south,north,east} $(bspc query -N -n)
 
 # preselect the ratio
 super + ctrl + {1-9}
@@ -150,11 +153,11 @@ super + ctrl + {1-9}
 
 # cancel the preselection for the focused desktop
 super + ctrl + space
-	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+	bspc query -N -d | xargs -I id -n 1 bspwm_presel cancel id
 
 # resize borders (wrapper around normal bspc resize window commands)
 super + alt + {h,j,k,l}
-	move_borders {west,south,north,east} 30
+	bspwm_move_borders {west,south,north,east} 30
 
 # move a floating window
 super + alt + {a,s,d,f}
