@@ -1,0 +1,23 @@
+super + x ; {p, l}
+	{poweroff, physlock}
+
+super + Return
+	st
+
+super + @space
+	runner
+
+XF86AudioMute
+	volume_change -t
+
+XF86Audio{Lower,Raise}Volume
+	volume_change -{d,i}5
+
+XF86Audio{Prev,Play,Next}
+	playerctl {previous,play-pause,next}
+
+@XF86MonBrightness{Down,Up}
+	brightness_change -{U,A} 5
+
+@Print
+	maim -s -t 10 -l -b 2 -c 0.27,0.52,0.533,0.15 "$LBRY/tmp/screenshots/$(date +'%Y-%m-%d_%H:%M:%S').png"
