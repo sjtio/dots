@@ -1,0 +1,42 @@
+#! /bin/sh
+
+# small minimal indicator for desktops in bspwm using lemonbar
+
+dark="#282828"
+gray1="#928374"
+light="#FBF1C7"
+red="#CC241D"
+blue="#458588"
+purple="#B16286"
+green="#98971A"
+
+bspc subscribe report |
+while read -r line; do
+    output=""
+    IFS=':'
+    for item in ${line#?}; do
+        name=${item#?}
+        case $item in
+            L*)
+                [ "$name" = "M" ] && output="${output}%{B$green} ${name} %{B-}"
+                ;;
+            [oOFuU]*)
+                case $item in
+                    o*)     background=$dark   ;; # occupied desktop
+                    [OF]*)  background=$blue   ;; # focused/focused occupied desktop
+                    u*)     background=$red    ;; # urgent desktop
+                    U*)     background=$purple ;; # focused urgent desktop
+                esac
+                output="${output}%{B$background}%{A:bspc desktop --focus \"${name}\":} ${name} %{A}%{B-}"
+                ;;
+            G*)
+                [ -n "$name" ] && output="${output}%{B$gray1} ${name} %{B-}"
+                ;;
+            M*)
+                output="${output}%{S+}%{c}"
+                ;;
+        esac
+    done
+    printf "%s\n" "$output"
+done | lemonbar -b -B "#00000000" -F "$light" -g x30 -n desktop_indicator | sh
+

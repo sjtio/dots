@@ -11,7 +11,7 @@ bspc desktop --layout tiled
 # focus root node and balance
 bspc node @/ --focus --balance
 
-window_id=$(slop --highlight --tolerance 9999999 --color 0.17578125,0.328125,0.34375,0.4 --format %i)
+window_id=$(slop --highlight --tolerance 9999999 --color 0.27,0.52,0.533,0.2 --format %i)
 bspc wm --load-state "$state_file"
 
 # this script doesn't really work because {dump,load}-state
