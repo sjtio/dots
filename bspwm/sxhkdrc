@@ -53,28 +53,26 @@ super + m
 super + n
 	bspc node -n newest.!automatic
 
-# swap the current node and the biggest node, or the last focused if current is biggest
+# focus the biggest node, or the last focused if current is biggest
 super + g
-	biggest="$(bspc query --nodes --node biggest.local)"; \
-	node=last.local; \
-	[ "$biggest" = "$(bspc query --nodes --node focused)" ] || node="$biggest"; \
-	bspc node -s $node
+	[ "$(bspc query -N -n)" != "$(bspc query -N -n biggest.local)" ] && bspc node -f biggest.local || \
+    bspc node -f last.leaf.local || bspc node -f any.leaf.!focused.local
 
-# focus south node (or just go to next node if node doesn't exist)
-super + j
-	bspc node -f south || bspc node -f next.leaf.local
+# swap the current node and the biggest node, or the last focused if current is biggest
+super + shift + g
+	bspc node -s biggest.local || bspc node -s last.leaf.local || bspc node -s any.leaf.!focused.local
 
-# focus north node (or just go to prev node if node doesn't exist)
-super + k
-	bspc node -f north || bspc node -f prev.leaf.local
+# focus dir node (or just go to next/prev node if node doesn't exist)
+super + {j,l}
+	bspc node -f {south,east} || bspc node -f next.leaf.local
+super + {k,h}
+	bspc node -f {north,west} || bspc node -f prev.leaf.local
 
-super + {h,l}
-	bspc node -f {west,east}
-
-# swap node
-super + shift + {h,j,k,l}
-	bspc node -s {west,south,north,east}
-
+# swap dir node (or just swap next/prev node if node doesn't exist)
+super + shift + {j,l}
+	bspc node -s {south,east} || bspc node -s next.leaf.local
+super + shift + {k,h}
+	bspc node -s {north,west} || bspc node -s prev.leaf.local
 
 # focus the node for the given path jump
 super + {v,b,comma,period}
@@ -84,37 +82,25 @@ super + {v,b,comma,period}
 super + shift + v
 	bspc node -f @/
 
-# focus the next/previous leaf node in the current desktop
-super + {_,shift + }c
-	bspc node -f {next,prev}.leaf.local
-
 # circulate desktop (holding ctrl does it just for focused subtree)
-super + {ctrl + ,_} {_,shift + }z
-	bspc node {_,@/} --circulate {forward,backward}
+super + {_,ctrl +} {_,shift +} z
+	bspc node {@/,_} -C {forward,backward}
 
 # focus the next/previous desktop in the current monitor
-super + bracket{left,right}
-	bspc desktop -f {prev,next}.local.occupied
-
-# focus the next/previous desktop in the current monitor
-button{6,7}
-	bspc desktop -f {prev,next}.local.occupied
+super + {_,shift +} bracket{left,right}
+	bspc {desktop -f, node -d} {prev,next}.local.occupied
+{_,shift +} button{6,7}
+	bspc {desktop -f, node -d} {prev,next}.local.occupied
 
 # activate the next/previous desktop in the non-focused monitor (keeps focus on current monitor)
-super + button{6,7}
+super + ctrl + bracket{left,right}
 	bspc desktop -a {prev,next}.!local.occupied
-
-# activate the next/previous desktop in the non-focused monitor (keeps focus on current monitor)
-super + shift + bracket{left,right}
+ctrl + button{6,7}
 	bspc desktop -a {prev,next}.!local.occupied
 
 # focus the last node/desktop
-super + {_, shift +} Tab
+super + {_,shift +} Tab
 	bspc {node,desktop} -f last
-
-# focus previous monitor
-super + shift + g
-	bspc monitor --focus last
 
 # preselect the direction
 super + ctrl + {h,j,k,l}
