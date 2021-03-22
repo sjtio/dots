@@ -4,10 +4,10 @@ super + x ; q
 
 # open a window on a new desktop
 super + shift + space
-	bspc desktop --focus next.!occupied && rofi -show
+	bspc desktop -f next.!occupied && runner
 
 # open a window on a new desktop
-super + ctrl + shift + space
+super + ctrl + space
 	bspwm_draw_cmd
 
 # focus the given desktop (and search for renamed version if fail)
@@ -120,7 +120,7 @@ super + ctrl + {1-9}
 	bspc node -o 0.{1-9}
 
 # cancel the preselection for the focused desktop
-super + ctrl + space
+super + ctrl + BackSpace
 	bspc query -N -d | xargs -I id -n 1 bspwm_presel cancel id
 
 # resize borders (wrapper around normal bspc resize window commands)
