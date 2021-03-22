@@ -20,12 +20,17 @@ super + shift + {q,w,e,r,t,y,u,i,o,p}
 	x={q,w,e,r,t,y,u,i,o,p}; \
 	bspc node -d "$x" || bspc node -d "$(bspc query -D --names | grep -m 1 "^$x·")"
 
+# send window to the given desktop (and search for renamed version if fail)
+super + ctrl + {q,w,e,r,t,y,u,i,o,p}
+	x={q,w,e,r,t,y,u,i,o,p}; \
+	bspc node -d "$x" --follow || bspc node -d "$(bspc query -D --names | grep -m 1 "^$x·")" --follow
+
 # focus/send a window to any desktop (dmenu)
-super + {_,shift +} a
-	bspwm_any_desktop {focus,move}
+super + {_,shift +,ctrl +} a
+	bspwm_any_desktop {focus,move,follow}
 
 # rename desktop (remove if blank)
-super + ctrl + a
+super + c
 	bspwm_rename_desktop
 
 # node state (tiled, pseudo_tiled, floating, fullscreen)
