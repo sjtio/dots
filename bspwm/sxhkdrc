@@ -104,7 +104,7 @@ super + {_,shift +} Tab
 
 # preselect the direction
 super + ctrl + {h,j,k,l}
-	bspwm_presel {west,south,north,east} $(bspc query -N -n)
+	bspc node -p {west,south,north,east}
 
 # preselect the ratio
 super + ctrl + {1-9}
@@ -112,7 +112,7 @@ super + ctrl + {1-9}
 
 # cancel the preselection for the focused desktop
 super + ctrl + BackSpace
-	bspc query -N -d | xargs -I id -n 1 bspwm_presel cancel id
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
 
 # resize borders (wrapper around normal bspc resize window commands)
 super + alt + {h,j,k,l}
