@@ -3,23 +3,22 @@
 [bar/main]
 monitor = ${settings.monitor}
 
-modules-left = ${env:WM}
-modules-center = title
-modules-right = ${settings.main_modules}
+modules-left = date
+modules-center = ${env:WM}
+modules-right = volume network battery
 
-font-0 = Iosevka:style=Regular:size=12;2
-font-1 = Iosevka Heavy:style=Heavy:size=12;2
-font-2 = Font Awesome 5 Free:style=Solid:size=11;3
-font-3 = Font Awesome 5 Free:style=Regular:size=11;3
-font-4 = Font Awesome 5 Brands:style=Regular:size=11;3
+font-0 = Iosevka:style=Regular:size=12;3
+font-1 = Iosevka Heavy:style=Heavy:size=12;3
+font-2 = Font Awesome 5 Free:style=Solid:size=11;2
+font-3 = Font Awesome 5 Free:style=Regular:size=11;2
+font-4 = Font Awesome 5 Brands:style=Regular:size=11;2
 font-5 = Noto Color Emoji:style=Regular:scale=8;1
 
 bottom = true
 border-size = 0
-height = 28
+height = 27
 module-margin = 1
 tray-position = right
-radius = 8
 
 background = ${color.background}
 foreground = ${color.foreground}
@@ -28,35 +27,15 @@ wm-restack = ${env:WM}
 enable-ipc = true
 
 
-[bar/extra]
-monitor = ${settings.extra_monitor}
-
-modules-left = bspwm
-modules-center = title
-modules-right = ${settings.extra_modules}
-
-bottom = true
-border-size = 0
-border-color = ${color.background}
-height = 26
-module-margin = 1
-
-background = ${color.background}
-foreground = ${color.foreground}
-
-font-0 = Iosevka:style=Regular:size=11;4
-font-1 = Iosevka Heavy:style=Heavy:size=11;4
-
-
 [settings]
 include-file = $XDG_CONFIG_HOME/polybar/$HOST
 
 
 [color]
-background = #282828
+background = #00000000
 foreground = #FBF1C7
 
-dark = #282828
+grey = #928374
 red = #CC241D
 green = #98971A
 yellow = #D79921
@@ -65,29 +44,27 @@ purple = #B16286
 aqua = #689D6A
 orange = #D65D0E
 
-bg2 = #3C3836
-gray1 = #928374
-gray2 = #928374
-light = #FBF1C7
+fg0 = #FBF1C7
+bg1 = #3C3836
+bg = #282828
 
 
 [module/bspwm]
 type = internal/bspwm
 pin-workspaces = true
 
-format = <label-mode> <label-state>
+format = <label-mode><label-state>
 
-format-font = 2
 label-focused = %name%
-label-focused-foreground = ${color.bg2}
-label-focused-background = ${color.green}
-label-focused-padding = 1
 label-focused-font = 2
+label-focused-padding = 1
+label-focused-foreground = ${color.bg1}
+label-focused-background = ${color.green}
 
 label-occupied = %name%
 label-occupied-font = 1
 label-occupied-padding = 1
-label-occupied-background = ${color.bg2}
+label-occupied-background = ${color.bg1}
 label-occupied-foreground = ${color.foreground}
 
 label-urgent = %name%
@@ -96,7 +73,6 @@ label-urgent-background = ${color.purple}
 label-urgent-underline = ${color.purple}
 label-urgent-padding = 1
 
-
 label-empty =
 label-empty-font = 1
 label-empty-padding = 0
@@ -104,49 +80,25 @@ label-empty-padding = 0
 label-mode-font = 3
 label-monocle = 
 label-monocle-padding = 1
-label-monocle-background = ${color.gray1}
 label-tiled = 
 label-tiled-padding = 1
-label-tiled-background = ${color.gray1}
 
 label-fullscreen = F
 label-fullscreen-padding = 1
-label-fullscreen-background = ${color.gray1}
-
 label-floating = S
 label-floating-padding = 1
-label-floating-background = ${color.gray1}
-
 label-pseudotiled = P
 label-pseudotiled-padding = 1
-label-pseudotiled-background = ${color.gray1}
 
 label-locked = L
-label-locked-foreground = #bd2c40
+label-locked-foreground = ${color.red}
 label-locked-padding = 1
-label-locked-background = ${color.gray1}
-
 label-sticky = S
-label-sticky-foreground = #fba922
+label-sticky-foreground = ${color.yellow}
 label-sticky-padding = 1
-label-sticky-background = ${color.gray1}
-
 label-private = P
-label-private-foreground = #bd2c40
+label-private-foreground = ${color.green}
 label-private-padding = 1
-label-private-background = ${color.gray1}
-
-
-[module/title]
-type = internal/xwindow
-
-format = <label>
-format-background = ${color.bg2}
-format-foreground = ${color.foreground}
-
-label-maxlen = 20
-label-empty =
-label-padding = 2
 
 
 [module/battery]
@@ -167,23 +119,23 @@ animation-charging-padding = 1
 ramp-capacity-background = ${color.purple}
 ramp-capacity-foreground = ${color.foreground}
 ramp-capacity-padding = 1
-ramp-capacity-0 =
-ramp-capacity-1 =
-ramp-capacity-2 =
-ramp-capacity-3 =
-ramp-capacity-4 =
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
 
 label-charging = %percentage%%
 label-charging-foreground = ${color.foreground}
-label-charging-background = ${color.bg2}
+label-charging-background = ${color.purple}
 label-charging-padding = 1
 label-discharging = %percentage%%
 label-discharging-foreground = ${color.foreground}
-label-discharging-background = ${color.bg2}
+label-discharging-background = ${color.purple}
 label-discharging-padding = 1
 label-full = %percentage%%
 label-full-foreground = ${color.foreground}
-label-full-background = ${color.bg2}
+label-full-background = ${color.purple}
 label-full-padding = 1
 
 
@@ -195,16 +147,16 @@ interval = 20
 format-connected = <ramp-signal><label-connected>
 label-connected = %essid%
 label-connected-padding = 1
-label-connected-background = ${color.bg2}
-label-connected-foreground = ${color.foreground}
-format-connect-font = 1
+label-connected-background = ${color.yellow}
+label-connected-foreground = ${color.bg1}
+format-connected-font = 1
 label-connected-font = 1
 
 ramp-signal-0 =
 ramp-signal-font = 3
 ramp-signal-padding = 1
 ramp-signal-background = ${color.yellow}
-ramp-signal-foreground = ${color.foreground}
+ramp-signal-foreground = ${color.bg1}
 
 
 [module/date]
@@ -212,11 +164,9 @@ type = custom/script
 label-active = %token%
 label-padding = 1
 format = <label>
-format-prefix = 
-format-prefix-padding = 1
-format-prefix-background = ${color.blue}
-format-prefix-foreground = ${color.foreground}
+format-background = ${color.blue}
+format-foreground = ${color.foreground}
 label-font = 2
 exec = current_datetime
 interval = 60.0
-label-background = ${color.bg2}
+label-background = ${color.blue}
