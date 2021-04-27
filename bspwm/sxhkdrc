@@ -4,11 +4,12 @@ super + x ; q
 
 # open a window on a new desktop
 super + shift + space
-	bspc desktop -f next.!occupied && runner
+	bspc desktop -f next.!occupied && rofi -show combi
 
-# open a window on a new desktop
+# open a window by drawing
 super + ctrl + space
-	bspwm_draw_cmd
+	bspc rule -a \* -o state=floating rectangle="$(slop --bordersize=4 --format="%wx%h+%x+%y")" && \
+	rofi -show drun -display-drun LAUNCH
 
 # focus the given desktop (and search for renamed version if fail)
 super + {q,w,e,r,t,y,u,i,o,p}

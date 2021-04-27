@@ -1,0 +1,71 @@
+#! /bin/sh
+
+# emoji_menu is a rofi plugin for selecting an emoji, though can also be called on it's own
+# using any dmenu like program
+#
+# the rofi plugin requires contents of github.com/googlefonts/noto-emoji/png/128 to be in $emoji_icons
+# flags are a mess to deal with as icons
+
+# TODO remove things that aren't fully qualified
+# TODO switch to 13.1
+# perhaps one day I'll  remove anything that has skin/hair/gender modifier as they don't really
+# communicate anything new
+
+
+emoji_version="12.0"
+
+mode=${1:-script} && [ "$1" ] && shift
+
+emoji_rofi="${XDG_CACHE_HOME:-$HOME/.cache}/dots/emojis-$emoji_version-rofi.txt"
+emoji_text="${XDG_CACHE_HOME:-$HOME/.cache}/dots/emojis-$emoji_version.txt"
+mkdir -p "$(dirname "$emoji_text")"
+
+
+rofi_generate() {
+    emoji_icons="${XDG_CACHE_HOME:-$HOME/.cache}/dots/emoji-icons/"
+
+    curl "https://www.unicode.org/Public/emoji/12.0/emoji-test.txt" |
+        tr '[:upper:]' '[:lower:]' |
+        sed \
+        -e '/^#/d' \
+        -e '/^[[:space:]]*$/d' \
+        -e 's/ fe0f//g' \
+        -e 's/[[:space:]]*;.*# /@/' \
+        -e ':a; s: \([0-9a-f]*\)\(.*@\):_\1\2: ; ta' \
+        -e 's/ /@/' \
+        -e 's:^\(.*\)@\(.*\)@\(.*\)$:\3\x00icon\x1f'"$emoji_icons"'emoji_u\1.png\x1finfo\x1f\2:' > "$emoji_rofi"
+
+}
+
+
+script_generate() {
+    curl "https://www.unicode.org/Public/emoji/$emoji_version/emoji-test.txt" |
+    sed -e '/^#/d' -e '/^[[:space:]]*$/d' -e 's/.*#[[:space:]]//' > "$emoji_text"
+}
+
+
+case "$mode" in
+    rofi)
+        [ ! -f "$emoji_rofi" ] && rofi_generate
+        [ -z "$*" ] && cat "$emoji_rofi" && exit
+        selected_emoji="$ROFI_INFO"
+        ;;
+    script)
+        [ ! -f "$emoji_text" ] && script_generate
+        [ "$WAYLAND_DISPLAY" ] && menu="fuzzel.sh --dmenu" || menu="rofi -dmenu -p EMOJI"
+
+        line="$($menu < "$emoji_text")"
+        selected_emoji="$(echo "$line" | cut -d' ' -f1 | tr -d '\n')"
+        ;;
+esac
+
+if [ "$WAYLAND_DISPLAY" ]; then
+    type_cmd=wtype
+    copy_cmd=wl-copy
+else
+    type_cmd="xdotool type"
+    copy_cmd="xsel -ib"
+fi
+
+echo "$selected_emoji" | $copy_cmd
+$type_cmd "$selected_emoji"

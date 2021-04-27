@@ -1,0 +1,37 @@
+configuration {
+
+    modi: "combi,calc,EMOJI:emoji_menu rofi";
+    combi-modi: "drun,window";
+
+    width: 35;
+    lines: 8;
+    columns: 1;
+    font: "monospace 12";
+    bw: 1;
+    icon-theme: "Papirus";
+
+    location: 0;
+    padding: 0;
+    yoffset: 0;
+    xoffset: 0;
+    fixed-num-lines: true;
+    show-icons: true;
+
+    display-drun: "";
+    display-window: "→";
+    display-combi: "LAUNCH";
+    display-calc: "CALC";
+
+    terminal: "st";
+
+    window-match-fields: "title,class";
+    window-format: "{t}";
+
+    color-normal: "#282828, #ebdbb2, #282828, #458588, #ebdbb2";
+    color-urgent: "#282828, #ebdbb2, #282828, #458588, #ebdbb2";
+    color-active: "#282828, #ebdbb2, #282828, #458588, #ebdbb2";
+    color-window: "#282828, #ebdbb2";
+
+	hide-scrollbar: 				true;
+	sidebar-mode: 					false;
+}

@@ -16,20 +16,6 @@ export HOST=$(cat /etc/hostname)
 export LBRY=$HOME/library
 export DOTS=$HOME/dots
 
-export GRIM_DEFAULT_DIR="$LBRY/tmp/Screenshots"
-export BEMENU_OPTS="--bottom            \
-                    --monitor=-1
-                    --line-height=31    \
-                    --fn 'Iosevka Bold' \
-                    --tb=#282828        \
-                    --tf=#458588        \
-                    --fb=#282828        \
-                    --ff=#EBDBB2        \
-                    --nb=#282828        \
-                    --nf=#EBDBB2        \
-                    --hb=#98971A        \
-                    --hf=#282828"
-
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
