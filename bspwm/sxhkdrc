@@ -35,7 +35,7 @@ super + c
 
 # node state (tiled, pseudo_tiled, floating, fullscreen)
 super + s ; {t,p,s,f}
-	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+	bspc node -t ~{tiled,pseudo_tiled,floating,fullscreen}
 
 # node flags (marked, locked, sticky, private)
 super + f ; {m,l,s,p}
@@ -75,12 +75,12 @@ super + shift + {k,h}
 	bspc node -s {north,west} || bspc node -s prev.leaf.local
 
 # focus the node for the given path jump
-super + {v,b,comma,period}
-	bspc node -f @{parent,brother,first,second}
+super + {v,b,comma,period,shift + v}
+	bspc node -f @{parent,brother,first,second,/}
 
-# select the `super' parent
-super + shift + v
-	bspc node -f @/
+# balance selected nodes
+super + ctrl + b
+	bspc node -B
 
 # circulate desktop (holding ctrl does it just for focused subtree)
 super + {_,ctrl +} {_,shift +} z
@@ -104,7 +104,7 @@ super + {_,shift +} Tab
 
 # preselect the direction
 super + ctrl + {h,j,k,l}
-	bspc node -p {west,south,north,east}
+	bspc node -p ~{west,south,north,east}
 
 # preselect the ratio
 super + ctrl + {1-9}
