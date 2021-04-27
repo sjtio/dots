@@ -1,0 +1,7 @@
+# ignore any file called secret or similar
+secret*
+
+# ignore all in st directory apart from config and PKGBUILD
+st/*
+!st/PKGBUILD
+!st/config.diff

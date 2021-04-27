@@ -1,0 +1,52 @@
+pkgname=st-sjtio-custom
+_pkgname=st
+pkgver=0.8.4
+pkgrel=2
+pkgdesc='Simple virtual terminal emulator for X'
+arch=('i686' 'x86_64')
+license=('MIT')
+depends=('libxft' 'libxext' 'xorg-fonts-misc')
+makedepends=('ncurses')
+provides=('st')
+conflicts=('st')
+url='http://st.suckless.org/'
+_patches=(
+          'https://st.suckless.org/patches/anysize/st-anysize-0.8.4.diff'
+          'https://st.suckless.org/patches/scrollback/st-scrollback-0.8.4.diff'
+          'https://st.suckless.org/patches/boxdraw/st-boxdraw_v2-0.8.3.diff'
+          )
+source=(http://dl.suckless.org/st/$_pkgname-$pkgver.tar.gz
+        config.diff
+        ${_patches[@]})
+md5sums=('e00b074c0e5d55513745c99f027b7a34'
+         '0ed98a7791b098a2e523464520f509fc'
+         'db025b249ee0b63ea6831f09a7d26655'
+         '24dbd5ae87a0dd49d43a46808045b3fe'
+         '8704f7c6e854b401ac79ffe40ebce2ce')
+
+prepare() {
+  cd $srcdir/$_pkgname-$pkgver
+  # skip terminfo which conflicts with ncurses
+  sed -i '/tic /d' Makefile
+  # cut out config.def.h patch for scrollback (changed keybinds are in config.diff)
+  sed -i '1,13d' "$srcdir/$(basename ${_patches[1]})"
+
+  for patch in "${_patches[@]}"; do
+    echo "Patch $(basename $patch)"
+    patch -Np1 -i "$srcdir/$(basename $patch)"
+  done
+
+  patch -Np1 -i "$srcdir/config.diff"
+}
+
+build() {
+  cd $srcdir/$_pkgname-$pkgver
+  make X11INC=/usr/include/X11 X11LIB=/usr/lib/X11
+}
+
+package() {
+  cd $srcdir/$_pkgname-$pkgver
+  make PREFIX=/usr DESTDIR="$pkgdir" TERMINFO="$pkgdir/usr/share/terminfo" install
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$_pkgname/LICENSE"
+  install -Dm644 README "$pkgdir/usr/share/doc/$_pkgname/README"
+}
