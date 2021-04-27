@@ -21,9 +21,9 @@
 
     font = Iosevka 12
     line_height = 0
-    markup = full>
+    markup = full
     format = "%s\n%b"
-    alignment = centre
+    alignment = center
 
     icon_position = left
     max_icon_size = 48
