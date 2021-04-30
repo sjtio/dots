@@ -1,0 +1,11 @@
+[Desktop Entry]
+
+Type=Application
+Version=1.0
+Name=Reset Monitors
+Comment=Autorandr wrapper
+Exec=reset_monitors
+Icon=display
+Terminal=false
+Categories=Utility;
+

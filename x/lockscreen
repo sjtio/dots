@@ -1,0 +1,34 @@
+#!/bin/dash
+
+# creates blurred screenshot lockscreen
+# uses inkscape to create lock icon PNG from SVG, and ffmpeg to take/blur screenshot of X and add overlay
+# uses i3lock to lock X11
+
+lockimage=/tmp/lockimage.png
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/dots"
+[ -d "$cache_dir" ] || mkdir -p "$cache_dir"
+overlay="$cache_dir/lockscreen-overlay.png"
+
+# generate lock icon if it doesn't exist
+[ -f "$overlay" ] || inkscape --pipe --export-filename="$overlay" --export-dpi=200 --export-background-opacity=0 << EOF
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="300" height="100" viewBox="0 0 300 100" >
+  <rect width="300" height="100" x="0" y="3" style="opacity:0.6;fill:#282828;fill-opacity:1;stroke-width:0.2" ry="3" />
+  <circle style="opacity:0.6;fill:#282828;fill-opacity:1;stroke-width:1" cx="50" cy="50" r="45" />
+  <rect style="fill:#ebd3b2" width="40" height="35" x="30" y="45" ry="3" />
+  <rect style="opacity:1;fill:none;stroke:#ebd3b2;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4" width="27" height="42" x="36.5" y="16.5" ry="15" />
+</svg>
+EOF
+
+# blurs and adds overlay
+ffmpeg -y -loglevel 8 \
+    -f x11grab        \
+    -s 1920x1080      \
+    -i "$DISPLAY"     \
+    -i "$overlay"     \
+    -vframes 1        \
+    -filter_complex "gblur=sigma=8,overlay=x=(main_w-overlay_w)/2:y=(main_h-overlay_h)/2" \
+    "$lockimage"
+
+i3lock --image="$lockimage" # --colors=... etc. if you have a fancy version
+rm "$lockimage"

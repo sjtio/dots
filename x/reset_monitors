@@ -1,0 +1,7 @@
+#! /bin/sh
+
+profiles="$(autorandr --detected)"
+
+[ -z "$profiles" ] && notify-send "No Profiles Available" && exit
+[ "$(echo "$profiles" | wc -l)" -eq 1 ] && autorandr --change --force && exit
+setup="$(echo "$profiles" | rofi -dmenu -p SETUP:)" && autorandr "$setup" --force
