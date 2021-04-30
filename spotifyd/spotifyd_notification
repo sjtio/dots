@@ -9,7 +9,7 @@ mkdir -p "$cache_dir"
 
 # loop may not be necessary
 while [ -z "$info" ]; do
-    info=$(playerctl -p spotifyd metadata --format "{{ title }}@{{ artist }} ({{ album }})@{{ mpris:artUrl }}")
+    info=$(playerctl -p spotifyd metadata --format "{{ title }}@{{ artist }} (<i>{{ album }}</i>)@{{ mpris:artUrl }}")
 done
 
 IFS=@ read -r title detail url << EOF
@@ -19,7 +19,14 @@ EOF
 [ "$(playerctl status)" = "Playing" ] || exit 0
 
 icon="$cache_dir/${url##*/}.png"
-[ -s "$icon" ] || curl -sf "$url" > "$icon"
+[ -s "$icon" ] ||
+curl -sf "$url" | convert - \
+                      \( +clone  -alpha extract \
+                         -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \
+                         \( +clone -flip \) -compose Multiply -composite \
+                         \( +clone -flop \) -compose Multiply -composite \
+                      \) -alpha off -compose CopyOpacity -composite "$icon"
+
 
 notify-send.sh --app-name=spotifyd-change \
                --urgency="low" \
