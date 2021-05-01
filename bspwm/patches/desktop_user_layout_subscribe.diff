@@ -1,0 +1,89 @@
+This diff adds a `desktop user_layout` option to `bspc subscribe`, and adds a user_layout to layout section of `bspc subscribe report`.
+This is probably the more ideal solution to the problem that subscribe_report_user_layout.diff addresses.
+Just need to write a polybar patch to add a user_layout option.
+
+diff --git a/contrib/zsh_completion b/contrib/zsh_completion
+index c3d0b47..0658464 100644
+--- a/contrib/zsh_completion
++++ b/contrib/zsh_completion
+@@ -245,7 +245,7 @@ _bspc() {
+ 					'(-c --count)'{-c,--count}'[Stop the corresponding bspc process after having received specified count of events]'
+ 				_values -w -S "_" events all report pointer_action \
+ 					"monitor:: :(add rename remove swap focus geometry)"\
+-					"desktop:: :(add rename remove swap transfer focus activate layout)"\
++					"desktop:: :(add rename remove swap transfer focus activate layout user_layout)"\
+ 					"node:: :(add remove swap transfer focus activate presel stack geometry state flag layer)"
+ 			fi
+ 			;;
+diff --git a/doc/bspwm.1.asciidoc b/doc/bspwm.1.asciidoc
+index ca504c2..e45516f 100644
+--- a/doc/bspwm.1.asciidoc
++++ b/doc/bspwm.1.asciidoc
+@@ -875,6 +875,9 @@ Events
+ 'desktop_layout <monitor_id> <desktop_id> tiled|monocle'::
+ 	The layout of a desktop changed.
+
++'desktop_user_layout <monitor_id> <desktop_id> tiled|monocle'::
++	The user layout of a desktop changed.
++
+ 'node_add <monitor_id> <desktop_id> <ip_id> <node_id>'::
+ 	A node is added.
+
+@@ -950,6 +953,9 @@ Each item has the form '<type><value>' where '<type>' is the first character of
+ 'L(T|M)'::
+ 	Layout of the focused desktop of a monitor.
+
++'Y(T|M)'::
++	User layout of the focused desktop of a monitor.
++
+ 'T(T|P|F|=|@)'::
+ 	State of the focused node of a focused desktop.
+
+diff --git a/src/desktop.c b/src/desktop.c
+index 421804d..0be1950 100644
+--- a/src/desktop.c
++++ b/src/desktop.c
+@@ -124,6 +124,7 @@ bool set_layout(monitor_t *m, desktop_t *d, layout_t l, bool user)
+ 	}
+
+ 	layout_t old_layout = d->layout;
++	layout_t old_user_layout = d->user_layout;
+
+ 	if (user) {
+ 		d->user_layout = l;
+@@ -149,6 +150,10 @@ bool set_layout(monitor_t *m, desktop_t *d, layout_t l, bool user)
+ 		}
+ 	}
+
++	if (d->user_layout != old_user_layout) {
++		put_status(SBSC_MASK_DESKTOP_LAYOUT, "desktop_user_layout 0x%08X 0x%08X %s\n", m->id, d->id, LAYOUT_STR(d->user_layout));
++	}
++
+ 	return true;
+ }
+
+diff --git a/src/parse.c b/src/parse.c
+index 05adf44..5223f7c 100644
+--- a/src/parse.c
++++ b/src/parse.c
+@@ -444,6 +444,8 @@ bool parse_subscriber_mask(char *s, subscriber_mask_t *mask)
+ 		*mask = SBSC_MASK_DESKTOP_ACTIVATE;
+ 	} else if (streq("desktop_layout", s)) {
+ 		*mask = SBSC_MASK_DESKTOP_LAYOUT;
++	} else if (streq("desktop_user_layout", s)) {
++		*mask = SBSC_MASK_DESKTOP_LAYOUT;
+ 	} else if (streq("monitor_add", s)) {
+ 		*mask = SBSC_MASK_MONITOR_ADD;
+ 	} else if (streq("monitor_rename", s)) {
+diff --git a/src/subscribe.c b/src/subscribe.c
+index 90a4bd5..1eb592b 100644
+--- a/src/subscribe.c
++++ b/src/subscribe.c
+@@ -102,6 +102,7 @@ int print_report(FILE *stream)
+ 		}
+ 		if (m->desk != NULL) {
+ 			fprintf(stream, ":L%c", LAYOUT_CHR(m->desk->layout));
++			fprintf(stream, ":Y%c", LAYOUT_CHR(m->desk->user_layout));
+ 			if (m->desk->focus != NULL) {
+ 				node_t *n = m->desk->focus;
+ 				if (n->client != NULL) {

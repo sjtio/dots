@@ -1,0 +1,38 @@
+This diff changes the output of `bspc subscribe report` to use user_layout rather than layout.
+I find user_layout status more helpful than layout with a status bar like polybar.
+The status is now put when the layout is changed without being concerned about whether a user layout or not.
+
+diff --git a/src/desktop.c b/src/desktop.c
+index 421804d..2abec40 100644
+--- a/src/desktop.c
++++ b/src/desktop.c
+@@ -141,12 +141,12 @@ bool set_layout(monitor_t *m, desktop_t *d, layout_t l, bool user)
+ 		if (user) {
+ 			arrange(m, d);
+ 		}
++	}
+
+-		put_status(SBSC_MASK_DESKTOP_LAYOUT, "desktop_layout 0x%08X 0x%08X %s\n", m->id, d->id, LAYOUT_STR(d->layout));
++	put_status(SBSC_MASK_DESKTOP_LAYOUT, "desktop_layout 0x%08X 0x%08X %s\n", m->id, d->id, LAYOUT_STR(d->layout));
+
+-		if (d == m->desk) {
+-			put_status(SBSC_MASK_REPORT);
+-		}
++	if (d == m->desk) {
++		put_status(SBSC_MASK_REPORT);
+ 	}
+
+ 	return true;
+diff --git a/src/subscribe.c b/src/subscribe.c
+index 90a4bd5..f440a4c 100644
+--- a/src/subscribe.c
++++ b/src/subscribe.c
+@@ -101,7 +101,7 @@ int print_report(FILE *stream)
+ 			fprintf(stream, ":%c%s", c, d->name);
+ 		}
+ 		if (m->desk != NULL) {
+-			fprintf(stream, ":L%c", LAYOUT_CHR(m->desk->layout));
++			fprintf(stream, ":L%c", LAYOUT_CHR(m->desk->user_layout));
+ 			if (m->desk->focus != NULL) {
+ 				node_t *n = m->desk->focus;
+ 				if (n->client != NULL) {
