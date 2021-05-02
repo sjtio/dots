@@ -1,0 +1,24 @@
+#! /bin/sh
+
+hsetroot -cover "$(find ~/wallpapers/ -type f | shuf -n 1)"
+xss-lock physlock &
+
+case $WM in
+    plasma)
+        export DESKTOP_SESSION=plasma
+        sxhkd "$HOME/.config/bspwm/sxhkdrc" &
+        KDEWM=/usr/bin/bspwm exec startplasma-x11
+        ;;
+    bspwm)
+        export _JAVA_AWT_WM_NONREPARENTING=1
+        wmname bspwm
+        picom -b
+        sxhkd "$HOME/.config/bspwm/sxhkdrc" &
+        exec bspwm
+        ;;
+    i3)
+        picom -b
+        sxhkd &
+        exec i3
+        ;;
+esac
