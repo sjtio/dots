@@ -1,0 +1,10 @@
+[Desktop Entry]
+
+Type=Application
+Version=1.0
+Name=BSPC Pick Node
+Comment=Pick a node to focus
+Exec=bspwm_pick_node
+Icon=display
+Terminal=false
+Categories=Utility;
