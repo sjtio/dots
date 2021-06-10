@@ -1,0 +1,96 @@
+#! /bin/sh
+
+# TODO better/unique icons, check papirus github page for options
+# TODO allow menu to appear using keyboard binding only (ignores pointer location, just appears over focused node)
+
+
+rofi_cmd() {
+    rofi -dmenu -theme context_menu -theme-str "inputbar { enabled: false; }" "$@"
+}
+
+desktop_settings="New Window\x00icon\x1fdisplay\x1finfo\x1fnew
+Draw New Window\x00icon\x1fdraw-geometry\x1finfo\x1fdnew
+Find Window\x00icon\x1fdisplay\x1finfo\x1ffind
+Find Empty Desktop\x00icon\x1fdisplay\x1finfo\x1fempty
+Layout\x00icon\x1fdisplay\x1finfo\x1flayout
+Screenshot\x00icon\x1fdisplay\x1finfo\x1fscreenshot"
+
+node_settings="Delete\x00icon\x1fdialog-error\x1finfo\x1fdelete
+Draw Move\x00icon\x1finput-mouse\x1finfo\x1fdraw
+Move to Presel\x00icon\x1fdisplay\x1finfo\x1fmove
+Presel -->\x00icon\x1fdisplay\x1finfo\x1fpresel
+Send -->\x00icon\x1fdisplay\x1finfo\x1fsend
+Send & Follow -->\x00icon\x1fdisplay\x1finfo\x1ffollow
+State -->\x00icon\x1fx-tile-panel\x1finfo\x1fstate
+Flag -->\x00icon\x1fdisplay\x1finfo\x1fflag
+Layer -->\x00icon\x1fdisplay\x1finfo\x1flayer"
+
+
+if node="$(bspc query --nodes --node pointed)"; then
+    item="$(printf "$node_settings\n$desktop_settings" | rofi_cmd)" || exit
+else
+    item="$(printf "$desktop_settings" | rofi_cmd)" || exit
+fi
+
+
+case "$item" in
+    'Delete')
+        bspc node "$node" --close
+        ;;
+    'Draw Move')
+        read -r w h x y << EOF
+$(slop --bordersize=4 --format="%w %h %x %y")
+EOF
+        bspc node "$node" --state floating
+        xdo move -x $x -y $y "$node"
+        xdo resize -w $w -h $h "$node"
+        ;;
+    'Move to Presel')
+        bspc node "$node" --to-node 'newest.!automatic'
+        ;;
+    'Presel -->')
+        dir="$(printf '%s\n%s\n%s\n%s\n' 'south' 'west' 'north' 'east' | rofi_cmd -no-show-icons -lines 2)"
+        bspc node "$node" --presel-dir "$dir"
+        ;;
+    'Send -->')
+        desktop="$(bspc query --desktops --names | rofi_cmd -columns 10 -lines 5 -no-fixed-num-lines)" || exit
+        bspc node "$node" --to-desktop "$desktop"
+        ;;
+    'Send & Follow -->')
+        desktop="$(bspc query --desktops --names | rofi_cmd -columns 10 -lines 2 -no-fixed-num-lines)"
+        bspc node "$node" --to-desktop "$desktop" --follow
+        ;;
+    'State -->')
+        state="$(printf '%s\n%s\n%s\n%s\n' 'tiled' 'pseudo_tiled' 'floating' 'fullscreen' | rofi_cmd -no-show-icons -lines 2)"
+        bspc node "$node" --state "$state"
+        ;;
+    'Flag -->')
+        flag="$(printf '%s\n%s\n%s\n%s\n%s\n' 'hidden' 'sticky' 'private' 'locked' 'marked' | rofi_cmd -no-show-icons -lines 3)"
+        bspc node "$node" --flag "$flag"
+        ;;
+    'Layer -->')
+        flag="$(printf '%s\n%s\n%s\n' 'below' 'normal' 'above' | rofi_cmd -no-show-icons)"
+        bspc node "$node" --layer"$flag"
+        ;;
+    'New Window')
+        rofi -modi drun -show drun -hover-select -me-accept-entry 'MousePrimary' -me-select-entry '' -scroll-method 0
+        ;;
+    'Draw New Window')
+        rect="$(slop --bordersize=4 --format="%wx%h+%x+%y")" || exit
+        bspc rule -a \* -o state=floating rectangle="$rect"
+        rofi -modi drun -show drun -hover-select -me-accept-entry 'MousePrimary' -me-select-entry '' -scroll-method 0
+        ;;
+    'Find Window')
+        bspwm_pick_node
+        ;;
+    'Find Empty Desktop')
+        bspc desktop --focus next.!occupied
+        ;;
+    'Layout')
+        bspc desktop --layout next
+        ;;
+    'Screenshot')
+        maim -s -t 10 -l -b 2 -c 0.27,0.52,0.533,0.15 |
+            xclip -i -t image/png -sel clip -f > "$LBRY/tmp/screenshots/$(date +'%Y-%m-%d_%H:%M:%S').png"
+        ;;
+esac

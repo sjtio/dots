@@ -6,6 +6,12 @@ super + x ; q
 super + shift + space
 	bspc desktop -f next.!occupied && rofi -show combi
 
+super + button2
+	bspwm_mouse_menu
+
+super + Menu
+	bspwm_mouse_menu
+
 # open a window by drawing
 super + ctrl + space
 	bspc rule -a \* -o state=floating rectangle="$(slop --bordersize=4 --format="%wx%h+%x+%y")" && \
@@ -39,8 +45,8 @@ super + s ; {t,p,s,f}
 	bspc node -t ~{tiled,pseudo_tiled,floating,fullscreen}
 
 # node flags (marked, locked, sticky, private)
-super + f ; {m,l,s,p}
-	bspc node -g {marked,locked,sticky,private}
+super + f ; {m,l,s,p,h}
+	bspc node -g {marked,locked,sticky,private,hidden}
 
 # close focused window
 super + d

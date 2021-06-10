@@ -1,0 +1,35 @@
+configuration {
+
+    modi: "drun";
+
+    scroll-method: 0;
+
+    width: -45;
+    lines: 9;
+    columns: 2;
+    xoffset: -100;
+    yoffset: -50;
+    font: "monospace 12";
+    bw: 1;
+    icon-theme: "Papirus";
+
+/*  location: 0;
+    padding: 0;
+    yoffset: 0;
+    xoffset: 0; */
+
+    fixed-num-lines: false;
+    show-icons: true;
+    hover-select: true;
+    me-accept-entry: "MousePrimary";
+    me-select-entry: "";
+
+    color-normal: "#282828, #ebdbb2, #282828, #458588, #ebdbb2";
+    color-urgent: "#282828, #ebdbb2, #282828, #458588, #ebdbb2";
+    color-active: "#282828, #ebdbb2, #282828, #458588, #ebdbb2";
+    color-window: "#282828, #ebdbb2";
+
+	hide-scrollbar: 				true;
+	sidebar-mode: 					false;
+    m: "-3";
+}
