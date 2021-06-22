@@ -1,11 +1,15 @@
 #! /bin/sh
 
-bin="$HOME/bin"
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
+data_dir="${XDG_DATA_HOME:-$HOME/.local/share}"
+
+bin="$HOME/bin"
 lbry="${LBRY:-$HOME/library}"
 dots="${DOTS:-$lbry/projects/dots}"
 
 setup_all() {
+    setup_general
     setup_bspwm
     setup_dunst
     setup_foot
@@ -26,6 +30,40 @@ setup_all() {
     setup_x
     setup_zathura
     setup_zsh
+}
+
+setup_general() {
+
+    # user-dirs.dirs
+    XDG_DESKTOP_DIR="$HOME/useless/desktop"
+    XDG_DOWNLOAD_DIR="$HOME/library/tmp/downloads"
+    XDG_TEMPLATES_DIR="$HOME/useless/templates"
+    XDG_PUBLICSHARE_DIR="$HOME/useless/public"
+    XDG_DOCUMENTS_DIR="$HOME/library/documents"
+    XDG_MUSIC_DIR="$HOME/library/media/audio/music"
+    XDG_PICTURES_DIR="$HOME/library/media/images"
+    XDG_VIDEOS_DIR="$HOME/library/media/video"
+
+    for d in DESKTOP DOWNLOAD TEMPLATES PUBLICSHARE DOCUMENTS MUSIC PICTURES VIDEOS; do
+        eval "dir=\$XDG_${d}_DIR"
+        xdg-user-dirs-update --set $d "$dir"
+    done
+
+    xdg-user-dirs-update
+
+    # the following plus some lines in zshenv are for clearing up the home directory
+
+    if command -v bat >/dev/null 2>&1; then
+        bat_dir="$(bat --config-file)"
+        mkdir -p "$(dirname -- "$bat_dir")"
+        echo '--theme="gruvbox-dark"' > "$(bat --config-file)"
+    fi
+
+    mkdir -p "$data_dir/tig"
+
+    if [ "$WGETRC" ]; then
+        echo hsts-file \= "$cache_dir"/wget-hsts > "$config_dir/wgetrc"
+    fi
 }
 
 setup_bspwm() {
