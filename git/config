@@ -1,0 +1,22 @@
+[user]
+	email = samuel@sjt.io
+	name = sjtio
+
+[alias]
+	st = status -sb
+	a = add
+	unstage = reset HEAD --
+	staged = diff --staged
+	ignore-bp = "!f() { curl https://raw.githubusercontent.com/github/gitignore/master/\"$1\".gitignore; }; f "
+
+[url "git@github.com:"]
+    insteadOf = "gh:"
+
+[url "https://aur.archlinux.org/"]
+    insteadOf = "aur:"
+
+[diff]
+	tool = vimdiff
+
+[core]
+	excludesfile = ~/.config/git/gitignore

@@ -9,6 +9,7 @@ setup_all() {
     setup_bspwm
     setup_dunst
     setup_foot
+    setup_git
     setup_kanshi
     setup_logiops
     setup_mako
@@ -49,6 +50,11 @@ setup_dunst() {
 setup_foot() {
     mkdir -pv "$config_dir/foot"
     ln -sfv "$dots/foot/foot.ini" "$config_dir/foot/foot.ini"
+}
+
+setup_git() {
+    mkdir -pv "$config_dir/git"
+    ln -sfv "$dots/git/config" "$config_dir/git/config"
 }
 
 setup_kanshi() {
