@@ -5,3 +5,5 @@ secret*
 st/*
 !st/PKGBUILD
 !st/config.diff
+
+tags
