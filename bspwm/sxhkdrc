@@ -96,13 +96,13 @@ super + {_,ctrl +} {_,shift +} z
 # focus the next/previous desktop in the current monitor
 super + {_,shift +} bracket{left,right}
 	bspc {desktop -f, node -d} {prev,next}.local.occupied
-{_,shift +} button{6,7}
+super+ {_,shift +} button{6,7}
 	bspc {desktop -f, node -d} {prev,next}.local.occupied
 
 # activate the next/previous desktop in the non-focused monitor (keeps focus on current monitor)
 super + ctrl + bracket{left,right}
 	bspc desktop -a {prev,next}.!local.occupied
-ctrl + button{6,7}
+super + ctrl + button{6,7}
 	bspc desktop -a {prev,next}.!local.occupied
 
 # focus the last node/desktop

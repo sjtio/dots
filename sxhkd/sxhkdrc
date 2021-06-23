@@ -1,17 +1,17 @@
 super + x ; {p, l}
 	{poweroff, physlock}
 
-super + Return
-	st
+super + {_,shift +} Return
+	{alacritty,firefox}
 
 super + @space
 	runner
 
-XF86AudioMute
-	volume_change -t
+super + button{4,5}
+	volume_change -{i5,d5}
 
-XF86Audio{Lower,Raise}Volume
-	volume_change -{d,i}5
+XF86Audio{Mute,RaiseVolume,LowerVolume}
+	volume_change -{t,i5,d5}
 
 XF86Audio{Prev,Play,Next}
 	playerctl {previous,play-pause,next}
