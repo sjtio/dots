@@ -1,0 +1,11 @@
+#! /bin/sh
+
+# gets unread count from a News app installed on a Nextcloud instance
+
+nc_api_url="$NC_URL/index.php/apps/news/api/v1-2/feeds"
+
+num="$(curl -s --user "$NC_USERNAME:$NC_PASSWORD" "$nc_url" \
+     | jq '.["feeds"][]["unreadCount"]'  \
+     | awk '{s+=$1} END {print s}')"
+
+[ -n "$num" ] && [ "$num" -ne 0 ] && echo "$num"

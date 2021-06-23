@@ -1,0 +1,4 @@
+#! /bin/sh
+
+num=$(checkupdates 2>/dev/null | wc -l)
+[ "$num" -ne 0 ] && echo "$num"
