@@ -1,0 +1,54 @@
+{
+  "position": "bottom",
+  "height": 30,
+  "modules-left": [ "clock" ],
+  "modules-center": [ "river/tags", "sway/workspaces" ],
+  "modules-right": [ "pulseaudio", "network", "battery" ],
+  "river/tags": {
+    "num-tags": 10,
+    "tag-labels": [ "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" ]
+  },
+  "clock": {
+    "format": "{:%H:%M on %^A %0dTH %^B}",
+    "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+  "battery": {
+    "states": {
+      "critical": 15
+    },
+    "format-icons": [ "", "", "", "", "" ],
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-alt": "{icon} {time}"
+  },
+  "network": {
+    "format-wifi": " {signalStrength}%",
+    "format-ethernet": " ",
+    "format-linked": " (No IP)",
+    "format-disconnected": "",
+    "format-alt": "{ifname}: {ipaddr}/{cidr} on {essid}",
+    "tooltip-format": "{ifname}: {ipaddr}/{cidr} on {essid}"
+  },
+  "pulseaudio": {
+    "on-scroll-up": "volume_change -i5",
+    "on-scroll-down": "volume_change -d5",
+    "on-click": "volume_change -t",
+    "on-click-middle": "pavucontrol",
+    "format": "{icon} {format_source}",
+    "format-muted": " {format_source}",
+    "format-bluetooth": "{icon} {format_source}",
+    "format-bluetooth-muted": " {icon} {format_source}",
+    "format-source": "",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [ "", "", "" ]
+    }
+  }
+}

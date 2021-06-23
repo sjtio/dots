@@ -1,0 +1,123 @@
+* {
+    border: none;
+    border-radius: 0;
+    font-family: Iosevka;
+    font-weight: bold;
+    min-height: 0;
+    font-size: 14px;
+}
+
+window#waybar {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#tags button {
+    padding: 2px 2px;
+    margin: 0 2px;
+    border-radius: 2px;
+}
+
+#tags button.occupied {
+    background-color: rgba(80, 73, 69, 0.8);
+    color: #ebdbb2;
+}
+
+#tags button:not(.occupied):not(.focused) {
+    background-color: #504945;
+    color: rgba(0, 0, 0, 0);
+}
+
+#tags button.focused {
+    background-color: #98971a;
+    color: #ebdbb2;
+}
+
+#tags button:first-child {
+    border-radius: 15px 2px 2px 2px ;
+}
+
+#tags button:last-child {
+    border-radius: 2px 15px 2px 2px ;
+}
+
+#tags button:only-child {
+    border-radius: 10px 10px 0px 0px ;
+}
+
+#tags button:hover {
+    box-shadow: inherit;
+    text-shadow: inherit;
+    background: #504945;
+    padding: 0 2px;
+}
+#tags button.focused:hover {
+    background-color: #98971a;
+}
+
+#tags,
+#clock,
+#battery,
+#network,
+#pulseaudio,
+#custom-media {
+    padding: 0 8px;
+    margin: 0 3px;
+    color: #ebdbb2;
+    border-radius: 3px;
+}
+
+#tags {
+    padding-left: 0px;
+}
+
+#battery {
+    background-color: #458588;
+    border-radius: 3px 15px 0px 3px;
+}
+
+#battery.charging {
+    background-color: #458588;
+}
+
+@keyframes blink {
+    0% {
+         background-color: #ebdbb2;
+         color: #458588;
+    }
+    10% {
+         color: #ebdbb2;
+         background-color: #458588;
+    }
+}
+
+#battery.critical:not(.charging) {
+    animation-name: blink;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#clock {
+    background-color: #458588;
+    border-radius: 15px 15px 0px 0px ;
+}
+
+#network {
+    background-color: #d79921;
+    color: #282828;
+}
+
+#pulseaudio {
+    background-color: #689d6a;
+    border-radius: 15px 3px 3px 0px ;
+}
+
+#pulseaudio.muted {
+    background-color: #b16286;
+}
+
+#custom-media {
+    background-color: #98971a;
+    border-radius: 3px 15px 0px 3px;
+}
