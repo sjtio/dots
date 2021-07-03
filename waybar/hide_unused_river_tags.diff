@@ -1,0 +1,35 @@
+diff --git a/src/modules/river/tags.cpp b/src/modules/river/tags.cpp
+index e96b201..21ad61a 100644
+--- a/src/modules/river/tags.cpp
++++ b/src/modules/river/tags.cpp
+@@ -103,8 +103,12 @@ void Tags::handle_focused_tags(uint32_t tags) {
+   for (auto &button : buttons_) {
+     if ((1 << i) & tags) {
+       button.get_style_context()->add_class("focused");
++      button.show();
+     } else {
+       button.get_style_context()->remove_class("focused");
++      if (!button.get_style_context()->has_class("occupied")) {
++        button.hide();
++      }
+     }
+     ++i;
+   }
+@@ -114,6 +118,9 @@ void Tags::handle_view_tags(struct wl_array *view_tags) {
+   // First clear all occupied state
+   for (auto &button : buttons_) {
+     button.get_style_context()->remove_class("occupied");
++    if (!button.get_style_context()->has_class("focused")) {
++      button.hide();
++    }
+   }
+ 
+   // Set tags with a view to occupied
+@@ -123,6 +130,7 @@ void Tags::handle_view_tags(struct wl_array *view_tags) {
+     for (auto &button : buttons_) {
+       if (*tags & (1 << i)) {
+         button.get_style_context()->add_class("occupied");
++        button.show();
+       }
+       ++i;
+     }
