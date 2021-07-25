@@ -10,6 +10,7 @@ dots="${DOTS:-$lbry/projects/dots}"
 
 setup_all() {
     setup_general
+    setup_alacritty
     setup_bspwm
     setup_dunst
     setup_foot
@@ -23,7 +24,6 @@ setup_all() {
     setup_river
     setup_rofi
     setup_spotifyd
-    setup_st
     setup_sxhkd
     setup_udevmon
     setup_vim
@@ -64,6 +64,11 @@ setup_general() {
     if [ "$WGETRC" ]; then
         echo hsts-file \= "$cache_dir"/wget-hsts > "$config_dir/wgetrc"
     fi
+}
+
+setup_alacritty() {
+    mkdir -pv "$config_dir/alacritty"
+    ln -sfv "$dots/alacritty/alacritty.yml" "$config_dir/alacritty/"
 }
 
 setup_bspwm() {
@@ -160,11 +165,6 @@ setup_spotifyd() {
     mkdir -pv "$bin"
     ln -sfv "$dots/spotifyd/spotifyd_notification" "$bin/"
 
-}
-
-setup_st() {
-    echo Building st probably requires internet connection
-    cd "$dots/st"; makepkg -sicf; cd -
 }
 
 setup_sxhkd() {
